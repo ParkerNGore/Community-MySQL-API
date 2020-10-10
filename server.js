@@ -1,16 +1,26 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-
-const database = require("./models");
-
+const db = require("./models");
 const app = express();
+
+const port = process.env.PORT ? process.env.PORT : 3005;
 
 app.use(cors());
 
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
 
-const port = process.env.PORT ? process.env.PORT : 3005;
-app.listen(port, () => {
-  console.log("Community Website API Server Started");
-});
+const apiRoutes = require("./routes/apiRoutes");
+app.use("/api", apiRoutes);
+
+db.sequelize
+  .sync()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`listening on: http://localhost:${port}`);
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
