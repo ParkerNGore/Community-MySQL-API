@@ -11,8 +11,12 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
-const apiRoutes = require("./routes/apiRoutes");
-app.use("/api", apiRoutes);
+require("./routes/users.routes")(app);
+require("./routes/events.routes")(app);
+require("./routes/calendars.routes")(app);
+
+// const apiRoutes = require("./routes/apiRoutes");
+// app.use("/api", apiRoutes);
 
 db.sequelize
   .sync()
