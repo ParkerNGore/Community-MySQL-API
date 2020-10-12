@@ -1,19 +1,23 @@
 const sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define("Users", {
-    username: {
+  const Event = sequelize.define("event", {
+    date: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    time: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password: {
+    relatedGame: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    timezone: {
-      type: DataTypes.STRING,
+    numberOfPlayersWanted: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   });
-  return User;
+  return Event;
 };

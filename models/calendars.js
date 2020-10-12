@@ -1,19 +1,23 @@
 const sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define("Users", {
-    username: {
+  const Calendar = sequelize.define("Calendar", {
+    year: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    month: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password: {
-      type: DataTypes.STRING,
+    numberOfDays: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
-    timezone: {
+    startingDayOfTheWeek: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   });
-  return User;
+  return Calendar;
 };
