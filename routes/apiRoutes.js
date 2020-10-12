@@ -51,8 +51,10 @@ router.delete("/user/:id", (req, res) => {
   db.Users.destroy({
     where: { id: userId },
   })
-    .then(() => res.status(200).send(`Successfully Deleted User ${userId}`))
-    .catch((error) => response.status(404).send(error));
+    .then(() =>
+      res.status(200).send(`Successfully Deleted User with id ${userId}`)
+    )
+    .catch((error) => res.status(404).send(error));
 });
 
 // Routes for Calendar
@@ -113,6 +115,65 @@ router.delete("/calendar/:id", (req, res) => {
       res
         .status(200)
         .send(`Successfully Deleted Calendar with id ${calendarId}`)
+    )
+    .catch((error) => res.status(404).send(error));
+});
+
+router.get("/events", (req, res) => {
+  db.Events.findAll()
+    .then((events) => res.status(200).send(events))
+    .catch((error) => res.status(400).send(error));
+});
+
+router.get("/event/:id", (req, res) => {
+  const eventId = req.params.id;
+
+  db.Events.findByPk(eventId)
+    .then((event) =>
+      res.status(200).send(`Successfully found Event with id ${eventId}`)
+    )
+    .catch((error) => res.status(400).send(error));
+});
+
+router.post("/event/newEvent", (req, res) => {
+  db.Events.create({
+    date: req.body.date,
+    time: req.body.time,
+    relatedGame: req.body.relatedGame,
+    numberOfPlayersWanted: req.body.numberOfPlayersWanted,
+  })
+    .then((submittedEvent) => res.status(200).send(submittedEvent))
+    .catch((error) => res.status(400).send(error));
+});
+
+router.put("/event/:id", (req, res) => {
+  const eventId = req.params.id;
+
+  db.Events.update(
+    {
+      date: req.body.date,
+      time: req.body.time,
+      relatedGame: req.body.relatedGame,
+      numberOfPlayersWanted: req.body.numberOfPlayersWanted,
+    },
+    {
+      where: { id: eventId },
+    }
+  )
+    .then(() =>
+      res.status(200).send(`Successfully Updated Event with id ${eventId}`)
+    )
+    .catch((error) => res.status(404).send(error));
+});
+
+router.delete("/event/:id", (req, res) => {
+  const eventId = req.params.id;
+
+  db.Events.destroy({
+    where: { id: eventId },
+  })
+    .then(() =>
+      res.status(200).send(`Successfully Deleted Event with id ${eventId}`)
     )
     .catch((error) => res.status(404).send(error));
 });
