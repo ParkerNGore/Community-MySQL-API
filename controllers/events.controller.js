@@ -5,9 +5,9 @@ const Events = db.Events;
 exports.create = (req, res) => {
   if (
     !req.body.date ||
-    req.body.time ||
-    req.body.relatedGame ||
-    req.body.numberOfPlayersWanted
+    !req.body.time ||
+    !req.body.relatedGame ||
+    !req.body.numberOfPlayersWanted
   ) {
     res.status(400).send("All fields are required!");
     return;
