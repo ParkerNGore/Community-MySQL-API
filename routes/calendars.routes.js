@@ -13,5 +13,5 @@ module.exports = (app) => {
 
   router.delete("/:id", calendars.deleteOne);
 
-  app.use("/api/users", router);
+  app.use("/api/calendars", router);
 };

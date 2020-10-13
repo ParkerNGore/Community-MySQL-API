@@ -1,7 +1,7 @@
 const sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  const Event = sequelize.define("event", {
+  const Event = sequelize.define("Events", {
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,

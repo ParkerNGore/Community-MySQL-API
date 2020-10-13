@@ -11,9 +11,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
+require("./routes/calendars.routes")(app);
 require("./routes/users.routes")(app);
 require("./routes/events.routes")(app);
-require("./routes/calendars.routes")(app);
 
 // const apiRoutes = require("./routes/apiRoutes");
 // app.use("/api", apiRoutes);

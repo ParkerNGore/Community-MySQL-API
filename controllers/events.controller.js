@@ -1,5 +1,4 @@
 const db = require("../models");
-const usersRoutes = require("../routes/users.routes");
 const Events = db.Events;
 
 exports.create = (req, res) => {

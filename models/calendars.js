@@ -1,7 +1,7 @@
 const sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  const Calendar = sequelize.define("Calendar", {
+  const Calendar = sequelize.define("Calendars", {
     year: {
       type: DataTypes.INTEGER,
       allowNull: false,
