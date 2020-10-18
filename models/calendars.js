@@ -1,6 +1,8 @@
 const sequelize = require("sequelize");
 
-module.exports = (sequelize, DataTypes) => {
+const importObj = require("./index");
+
+exports.model = (sequelize, DataTypes) => {
   const Calendar = sequelize.define("Calendars", {
     year: {
       type: DataTypes.INTEGER,
@@ -19,5 +21,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
+
+  console.log(importObj);
+  Calendar.hasMany(importObj.references.Events);
+
   return Calendar;
 };
+
+exports.references = ["events"];
