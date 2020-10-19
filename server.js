@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 require("./routes/calendars.routes")(app);
 require("./routes/users.routes")(app);
 require("./routes/events.routes")(app);
+require("./routes/oauth2.routes")(app);
 
 // const apiRoutes = require("./routes/apiRoutes");
 // app.use("/api", apiRoutes);
