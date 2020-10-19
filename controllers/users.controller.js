@@ -2,14 +2,20 @@ const db = require("../models");
 const Users = db.Users;
 
 exports.create = (req, res) => {
-  if (!req.body.username || !req.body.password || !req.body.timezone) {
+  if (
+    !req.body.username ||
+    !req.body.token ||
+    !req.body.tokenExpiration ||
+    !req.body.timezone
+  ) {
     res.status(400).send("All fields are required!");
     return;
   }
 
   const user = {
     username: req.body.username,
-    password: req.body.password,
+    token: req.body.token,
+    tokenExpiration: req.body.tokenExpiration,
     timezone: req.body.timezone,
   };
 
@@ -38,7 +44,8 @@ exports.updateOne = (req, res) => {
   Users.update(
     {
       username: req.body.username,
-      password: req.body.password,
+      token: req.body.token,
+      tokenExpiration: req.body.tokenExpiration,
       timezone: req.body.timezone,
     },
     {
