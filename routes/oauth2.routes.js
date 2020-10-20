@@ -1,17 +1,12 @@
 module.exports = (app) => {
-  const events = require("../controllers/events.controller.js");
+  const oauth2 = require("../controllers/oauth2.controller");
 
   const router = require("express").Router();
 
-  router.get("/", events.findAll);
+  router.get("/login", oauth2.handleLogin);
 
-  router.get("/:id", events.findOne);
+  router.get("/logout", oauth2.handleLogout);
 
-  router.post("/", events.create);
-
-  router.put("/:id", events.updateOne);
-
-  router.delete("/:id", events.deleteOne);
-
-  app.use("/api/events", router);
+  router.get("/callback", oauth2.handleCallback);
+  app.use("/api/oauth2", router);
 };
