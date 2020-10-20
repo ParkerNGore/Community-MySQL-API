@@ -1,6 +1,5 @@
 const express = require("express");
 const fetch = require("node-fetch");
-const btoa = require("btoa");
 const { catchAsync } = require("../util/AsyncUtil");
 
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -34,55 +33,6 @@ exports.handleCallback = catchAsync(async (req, res) => {
 
   const code = req.query.code;
 
-  // const dataObj = {
-  //   client_id: CLIENT_ID,
-  //   client_secret: CLIENT_SECRET,
-  //   grant_type: "authorization_code",
-  //   code: code,
-  //   redirect_uri: REDIRECT_URI,
-  //   scope: "identify email guilds",
-  // };
-
-  // const data = formurlencoded(dataObj);
-
-  // for (const prop of data) {
-  //   console.log(`prop: ${prop}`);
-  // }
-
-  // const data = new FormData();
-
-  // data.append("client_id", CLIENT_ID);
-  // data.append("client_secret", CLIENT_SECRET);
-  // data.append("grant_type", "authorization_code");
-  // data.append("redirect_uri", REDIRECT_URI);
-  // data.append("scope", "identify email guilds");
-  // data.append("code", code);
-
-  // const response = await axios.post(
-  //   "https://discord.com/api/oauth2/token",
-  //   data,
-  //   {
-  //     headers: {
-  //       "Content-Type": "application/x-www-form-urlencoded",
-  //     },
-  //   }
-  // );
-
-  // request.post("https://discord.com/api/oauth2/token").form(
-  //   {
-  //     data,
-  //   },
-  //   async (error, response, body) => {
-  //     const json = await response.json();
-  //     res.redirect(`/?token=${json.access_token}`);
-  //   }
-  // );
-
-  // const response = await fetch("https://discordapp.com/api/oauth2/token", {
-  //   method: "POST",
-  //   form: data,
-  // });
-
   const { URLSearchParams } = require("url");
 
   const params = new URLSearchParams();
@@ -92,12 +42,6 @@ exports.handleCallback = catchAsync(async (req, res) => {
   params.append("redirect_uri", REDIRECT_URI);
   params.append("scope", "identity email guilds");
   params.append("code", code);
-  // data.append("client_id", CLIENT_ID);
-  // data.append("client_secret", CLIENT_SECRET);
-  // data.append("grant_type", "authorization_code");
-  // data.append("redirect_uri", REDIRECT_URI);
-  // data.append("scope", "identify email guilds");
-  // data.append("code", code);
 
   fetch(`https://discord.com/api/oauth2/token`, {
     method: "POST",
