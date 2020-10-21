@@ -51,6 +51,11 @@ files.forEach((file) => {
           sequelize,
           Sequelize.DataTypes
         );
+
+        if (model.associate) {
+          model.associate(db);
+        }
+
         db[model.name] = model;
         loadedModules.push(model.name);
       });
