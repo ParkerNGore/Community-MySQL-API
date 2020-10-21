@@ -52,17 +52,18 @@ files.forEach((file) => {
           Sequelize.DataTypes
         );
 
+        db[model.name] = model;
+
         if (model.associate) {
           model.associate(db);
         }
 
-        db[model.name] = model;
+        exports[`reference_${model.name.toLowerCase()}`] = db[model.name];
+
         loadedModules.push(model.name);
       });
   }
 });
-
-exports.references = db;
 
 files
   .filter((file) => {

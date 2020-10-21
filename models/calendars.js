@@ -22,8 +22,18 @@ exports.model = (sequelize, DataTypes) => {
     },
   });
 
-  console.log(importObj);
-  Calendar.hasMany(importObj.references.Events);
+  console.log("Printing props:");
+  for (const prop in importObj) {
+    console.log(`prop: ${prop}`);
+  }
+
+  console.log(importObj.reference_events);
+
+  if (!importObj.reference_events) {
+    console.log("reference_events is undefined/null");
+  }
+
+  Calendar.hasMany(importObj.reference_events);
 
   return Calendar;
 };
