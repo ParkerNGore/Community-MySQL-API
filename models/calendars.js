@@ -38,4 +38,4 @@ exports.model = (sequelize, DataTypes) => {
   return Calendar;
 };
 
-exports.references = ["events"];
+exports.references = ["Events"];

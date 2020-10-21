@@ -52,22 +52,21 @@ files.forEach((file) => {
           Sequelize.DataTypes
         );
 
-        if (model.associate) {
-          model.associate(db);
-        }
-
         db[model.name] = model;
 
         exports[`reference_${model.name.toLowerCase()}`] = db[model.name];
 
-        loadedModules.push(db[model.name]);
+        loadedModules.push(model.name.toLowerCase());
       });
   }
 });
 
 files
   .filter((file) => {
-    return !loadedModules.includes(file);
+    const fileName = file.substring(0, file.length - 3).toLowerCase();
+
+    console.log(fileName);
+    return !loadedModules.includes(fileName);
   })
   .forEach((file) => {
     const model = require(path.join(__dirname, file)).model(
@@ -75,7 +74,7 @@ files
       Sequelize.DataTypes
     );
     db[model.name] = model;
-    loadedModules.push(model.name);
+    loadedModules.push(model.name.toLowerCase());
   });
 
 console.log("Showing loadedModules:");
