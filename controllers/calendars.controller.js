@@ -1,4 +1,4 @@
-const db = require("../models");
+const { db } = require("../models");
 const Calendars = db.Calendars;
 
 exports.create = (req, res) => {

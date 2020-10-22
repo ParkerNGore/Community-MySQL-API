@@ -1,5 +1,7 @@
 const sequelize = require("sequelize");
 
+// Can't use destructring here for some reason
+// Just results in undefined
 const importObj = require("./index");
 
 exports.model = (sequelize, DataTypes) => {
@@ -22,18 +24,9 @@ exports.model = (sequelize, DataTypes) => {
     },
   });
 
-  console.log("Printing props:");
-  for (const prop in importObj) {
-    console.log(`prop: ${prop}`);
-  }
-
-  console.log(importObj.reference_events);
-
-  if (!importObj.reference_events) {
-    console.log("reference_events is undefined/null");
-  }
-
+  console.debug("Applying hasMany to Calendar...");
   Calendar.hasMany(importObj.reference_events);
+  console.debug("Finished applying hasMany to Calendar~");
 
   return Calendar;
 };

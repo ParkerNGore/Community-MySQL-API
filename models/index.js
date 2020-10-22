@@ -26,27 +26,27 @@ const files = fs.readdirSync(__dirname).filter((file) => {
   );
 });
 
-console.log("Creating loadedModules!");
+console.debug("Creating loadedModules!");
 const loadedModules = [];
 
-console.log("Looking through all modules for references!");
+console.debug("Looking through all modules for references!");
 files.forEach((file) => {
   const exportObj = require(path.join(__dirname, file));
 
-  console.log("Checking " + file + "...");
+  console.debug("Checking " + file + "...");
   if ("references" in exportObj) {
-    console.log("References list in " + file + ". Adding references");
+    console.debug("References list in " + file + ". Adding references");
     exportObj.references
       .filter((file) => {
         const newFile = !loadedModules.includes(file);
 
         if (!newFile) {
-          console.log("loadedModules already includes this reference");
+          console.debug("loadedModules already includes this reference");
         }
         return newFile;
       })
       .forEach((reference) => {
-        console.log(`Loading reference ${reference}`);
+        console.debug(`Loading reference ${reference}`);
         const model = require(path.join(__dirname, reference)).model(
           sequelize,
           Sequelize.DataTypes
@@ -54,9 +54,15 @@ files.forEach((file) => {
 
         db[model.name] = model;
 
-        exports[`reference_${model.name.toLowerCase()}`] = db[model.name];
+        if (model.associate) {
+          model.associate(db);
+        }
 
-        loadedModules.push(model.name.toLowerCase());
+        const lowerCaseName = model.name.toLowerCase();
+
+        exports[`reference_${lowerCaseName}`] = model;
+
+        loadedModules.push(lowerCaseName);
       });
   }
 });
@@ -65,7 +71,6 @@ files
   .filter((file) => {
     const fileName = file.substring(0, file.length - 3).toLowerCase();
 
-    console.log(fileName);
     return !loadedModules.includes(fileName);
   })
   .forEach((file) => {
@@ -76,16 +81,6 @@ files
     db[model.name] = model;
     loadedModules.push(model.name.toLowerCase());
   });
-
-console.log("Showing loadedModules:");
-for (const module of loadedModules) {
-  console.log(`module: ${module}`);
-}
-
-console.log("Showing db:");
-for (const module in db) {
-  console.log(`module: ${module}`);
-}
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
