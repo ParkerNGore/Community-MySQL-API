@@ -20,18 +20,66 @@ if (config.use_env_variable) {
   );
 }
 
-fs.readdirSync(__dirname)
+const files = fs.readdirSync(__dirname).filter((file) => {
+  return (
+    file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
+  );
+});
+
+console.debug("Creating loadedModules!");
+const loadedModules = [];
+
+console.debug("Looking through all modules for references!");
+files.forEach((file) => {
+  const exportObj = require(path.join(__dirname, file));
+
+  console.debug("Checking " + file + "...");
+  if ("references" in exportObj) {
+    console.debug("References list in " + file + ". Adding references");
+    exportObj.references
+      .filter((file) => {
+        const newFile = !loadedModules.includes(file);
+
+        if (!newFile) {
+          console.debug("loadedModules already includes this reference");
+        }
+        return newFile;
+      })
+      .forEach((reference) => {
+        console.debug(`Loading reference ${reference}`);
+        const model = require(path.join(__dirname, reference)).model(
+          sequelize,
+          Sequelize.DataTypes
+        );
+
+        db[model.name] = model;
+
+        if (model.associate) {
+          model.associate(db);
+        }
+
+        const lowerCaseName = model.name.toLowerCase();
+
+        exports[`reference_${lowerCaseName}`] = model;
+
+        loadedModules.push(lowerCaseName);
+      });
+  }
+});
+
+files
   .filter((file) => {
-    return (
-      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
-    );
+    const fileName = file.substring(0, file.length - 3).toLowerCase();
+
+    return !loadedModules.includes(fileName);
   })
   .forEach((file) => {
-    const model = require(path.join(__dirname, file))(
+    const model = require(path.join(__dirname, file)).model(
       sequelize,
       Sequelize.DataTypes
     );
     db[model.name] = model;
+    loadedModules.push(model.name.toLowerCase());
   });
 
 Object.keys(db).forEach((modelName) => {
@@ -43,4 +91,4 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+exports.db = db;

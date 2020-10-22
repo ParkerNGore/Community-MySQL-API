@@ -1,6 +1,6 @@
 const sequelize = require("sequelize");
 
-module.exports = (sequelize, DataTypes) => {
+exports.model = (sequelize, DataTypes) => {
   const Event = sequelize.define("Events", {
     date: {
       type: DataTypes.DATEONLY,

@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+exports.model = (sequelize, DataTypes) => {
   const User = sequelize.define("Users", {
     // Username is their Discord username/email
     username: {
